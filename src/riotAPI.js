@@ -10,7 +10,7 @@ async function getpuuid(gameName, tagLine) {
         console.log(response.data);
         return response.data.puuid;
     } catch(error) {
-        console.error(error);
+        console.log(error.message);
     }
 }
 

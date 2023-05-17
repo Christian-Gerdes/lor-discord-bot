@@ -1,4 +1,5 @@
 const riotAPI = require('./riotAPI');
+const { DiscordAPIError } = require('discord.js');
 require('dotenv/config');
 
 const prefix = process.env.PREFIX;
@@ -15,7 +16,7 @@ DiscordListener.prototype.handleReady = function () {
     console.log(`Logged in as ${this.client.user.tag}`);
 };
 
-DiscordListener.prototype.handleMessage = async function (message) {
+DiscordListener.prototype.handleMessage = function (message) {
     if(!message.content.startsWith(prefix) || message.author.bot) return;
     
     const args = message.content.slice(prefix.length).trim().split(/ +/);
@@ -44,8 +45,13 @@ DiscordListener.prototype.puuid = async function (message, args) {
     const tagLine = apiParams.shift();
     const puuid = await riotAPI.getpuuid(gameName, tagLine);
     
-    const response = puuid;
-    
+    let response = puuid;
+
+    if(response === undefined)
+    {
+        response = 'unable to find puuid - account not found';
+    }
+
     console.log(response);
     message.channel.send(response);
 }
