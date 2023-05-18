@@ -34,8 +34,23 @@ async function getMastersCount() {
     }
 }
 
+async function getMasters(count = 10) {
+    try {
+        if(Number.isInteger(count) === false)
+        {
+            count = 10;
+        }
+        let masters = await getLeaderboard();
+        masters.players.splice(count);
+        return masters;
+    } catch(error) {
+        console.log(error.message);
+    }
+}
+
 module.exports = {
     getpuuid,
     getLeaderboard,
-    getMastersCount
+    getMastersCount,
+    getMasters
 };

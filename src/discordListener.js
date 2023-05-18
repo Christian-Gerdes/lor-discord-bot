@@ -32,14 +32,18 @@ DiscordListener.prototype.handleMessage = function (message) {
     }
 
     if(command === 'nummasters' || command === 'masterscount') {
-        this.mastersCount(message)
+        this.mastersCount(message);
+    }
+
+    if(command === 'masters') {
+        this.masters(message, args);
     }
 };
 
 DiscordListener.prototype.hello = async function (message) {
     const response = 'Hello, World!';
     
-    console.log(response)
+    console.log(response);
     message.channel.send(response);
 }
 
@@ -65,9 +69,28 @@ DiscordListener.prototype.mastersCount = async function (message) {
     let response;
     
     if(mastersCount === undefined) {
-        response = 'Unable to determine number of players in Masters'
+        response = 'Unable to determine number of players in Masters';
     } else {
-        response = `There are ${mastersCount} players in Masters`
+        response = `There are ${mastersCount} players in Masters`;
+    }
+    console.log(response);
+    message.channel.send(response);
+}
+
+DiscordListener.prototype.masters = async function (message, args) {
+    count = parseInt(args.shift());
+    const masters = await riotAPI.getMasters(count);
+
+    let response;
+
+    if(masters === undefined) {
+        response = 'Unable to determine the Masters players';
+    } else {
+        if(args.shift() === 'format') {
+            response = JSON.stringify(masters.players, null, '\t');
+        } else {
+            response = JSON.stringify(masters.players);
+        }
     }
     console.log(response);
     message.channel.send(response);
