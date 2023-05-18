@@ -53,11 +53,13 @@ DiscordListener.prototype.puuid = async function (message, args) {
     const tagLine = apiParams.shift();
     const puuid = await riotAPI.getpuuid(gameName, tagLine);
     
-    let response = puuid;
+    let response;
 
-    if(response === undefined)
+    if(puuid === undefined)
     {
         response = 'Unable to find puuid - account not found';
+    } else {
+        response = puuid;
     }
 
     console.log(response);
