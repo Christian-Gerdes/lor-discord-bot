@@ -3,7 +3,7 @@ const axios = require('axios');
 
 const apiKey = process.env.RIOT_API_KEY;
 
-async function getpuuid(gameName, tagLine) {
+async function getpuuid(gameName, tagLine = 'NA1') {
     try {
         const url = `https://americas.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${gameName}/${tagLine}?api_key=${apiKey}`;
         const response = await axios.get(url);
