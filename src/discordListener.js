@@ -30,6 +30,10 @@ DiscordListener.prototype.handleMessage = function (message) {
     if(command === 'puuid') {
         this.puuid(message, args);
     }
+
+    if(command === 'nummasters' || command === 'masterscount') {
+        this.mastersCount(message)
+    }
 };
 
 DiscordListener.prototype.hello = async function (message) {
@@ -49,9 +53,22 @@ DiscordListener.prototype.puuid = async function (message, args) {
 
     if(response === undefined)
     {
-        response = 'unable to find puuid - account not found';
+        response = 'Unable to find puuid - account not found';
     }
 
+    console.log(response);
+    message.channel.send(response);
+}
+
+DiscordListener.prototype.mastersCount = async function (message) {
+    const mastersCount = await riotAPI.getMastersCount();
+    let response;
+    
+    if(mastersCount === undefined) {
+        response = 'Unable to determine number of players in Masters'
+    } else {
+        response = `There are ${mastersCount} players in Masters`
+    }
     console.log(response);
     message.channel.send(response);
 }
