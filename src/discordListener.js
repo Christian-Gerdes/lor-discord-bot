@@ -38,6 +38,9 @@ DiscordListener.prototype.handleMessage = function (message) {
     if(command === 'masters') {
         this.masters(message, args);
     }
+    if(command === 'matches') {
+        this.matches(message, args);
+    }
 };
 
 DiscordListener.prototype.hello = async function (message) {
@@ -92,6 +95,39 @@ DiscordListener.prototype.masters = async function (message, args) {
             response = JSON.stringify(masters.players, null, '\t');
         } else {
             response = JSON.stringify(masters.players);
+        }
+    }
+    console.log(response);
+    message.channel.send(response);
+}
+
+DiscordListener.prototype.matches = async function (message, args) {
+    let account = args.shift();
+    let puuid;
+
+    if(args.includes('puuid')) {
+        puuid = account;
+    } else {
+        account = account.split('#');
+        const gameName = account.shift();
+        const tagLine = account.shift();
+        puuid = await riotAPI.getpuuid(gameName, tagLine);
+    }
+
+    let response;
+
+    if(puuid === undefined) {
+        response = 'Account not found';
+    } else {
+        const matches = await riotAPI.getMatches(puuid);
+        if (matches === undefined) {
+            response = 'Match history not found';
+        } else {
+            if(args.includes('format')){
+                response = JSON.stringify(matches, null, '\t');
+            } else {
+                response = JSON.stringify(matches);
+            }
         }
     }
     console.log(response);

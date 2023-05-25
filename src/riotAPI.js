@@ -48,9 +48,21 @@ async function getMasters(count = 10) {
     }
 }
 
+async function getMatches(puuid) {
+    try {
+        const url = `https://americas.api.riotgames.com/lor/match/v1/matches/by-puuid/${puuid}/ids?api_key=${apiKey}`;
+        const response = await axios.get(url);
+        console.log(response.data);
+        return response.data;
+    } catch(error) {
+        console.log(error.message);
+    }
+}
+
 module.exports = {
     getpuuid,
     getLeaderboard,
     getMastersCount,
-    getMasters
+    getMasters,
+    getMatches
 };
