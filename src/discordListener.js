@@ -83,15 +83,16 @@ DiscordListener.prototype.mastersCount = async function (message) {
 }
 
 DiscordListener.prototype.masters = async function (message, args) {
+    const format = args.includes('format') ? true : false;
     count = parseInt(args.shift());
     const masters = await riotAPI.getMasters(count);
 
-    let response;
+    let response = '';
 
     if(masters === undefined) {
         response = 'Unable to determine the Masters players';
     } else {
-        if(args.shift() === 'format') {
+        if(format === true) {
             response = JSON.stringify(masters.players, null, '\t');
         } else {
             response = JSON.stringify(masters.players);
